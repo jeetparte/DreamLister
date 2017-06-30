@@ -82,7 +82,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func attemptFetch() {
         let fetchRequest: NSFetchRequest<Item> = Item.fetchRequest()
         let dateSort = NSSortDescriptor(key: "created", ascending: false)
-        fetchRequest.sortDescriptors = [dateSort]
+        let priceSort = NSSortDescriptor(key: "price", ascending: true)
+        let titleSort = NSSortDescriptor(key: "title", ascending: true)
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            fetchRequest.sortDescriptors = [dateSort]
+        case 1:
+            fetchRequest.sortDescriptors = [priceSort]
+        case 2:
+            fetchRequest.sortDescriptors = [titleSort]
+        default:
+            fetchRequest.sortDescriptors = [dateSort]
+            break
+        }
         
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         
@@ -98,6 +110,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
+    @IBAction func segmentPressed(_ sender: UISegmentedControl) {
+        attemptFetch()
+        tableView.reloadData()
+    }
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
     }
@@ -150,6 +166,5 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         appDelegate.saveContext()
     }
-    
 }
 

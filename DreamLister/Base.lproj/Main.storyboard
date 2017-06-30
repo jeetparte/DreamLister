@@ -33,6 +33,9 @@
                                     <segment title="Price"/>
                                 </segments>
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="segmentPressed:" destination="BYZ-38-t0r" eventType="valueChanged" id="H4c-Cz-Na4"/>
+                                </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="200" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="KQ0-Rc-v6f">
                                 <rect key="frame" x="16" y="128" width="343" height="539"/>
@@ -146,7 +149,7 @@
             </objects>
             <point key="canvasLocation" x="991.20000000000005" y="83.208395802098963"/>
         </scene>
-        <!--Add / Edit-->
+        <!--Item DetailsVC-->
         <scene sceneID="IeU-nP-K51">
             <objects>
                 <viewController id="EcA-2G-DOv" customClass="ItemDetailsVC" customModule="DreamLister" customModuleProvider="target" sceneMemberID="viewController">
@@ -249,7 +252,12 @@
                             <constraint firstItem="AiP-gB-Zuc" firstAttribute="top" secondItem="eeb-Y3-YPZ" secondAttribute="bottom" constant="8" id="zZX-0H-zaU"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Add / Edit" id="qWO-EA-KTT">
+                    <navigationItem key="navigationItem" id="qWO-EA-KTT">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="YK8-Or-uhS">
+                            <connections>
+                                <action selector="cancelButtonPressed:" destination="EcA-2G-DOv" id="hXR-nX-T3e"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="trash" id="Q4L-ii-RoJ">
                             <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>

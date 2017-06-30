@@ -22,14 +22,18 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     private var imagePicker: UIImagePickerController!
     var itemToEdit: Item?
     
+    override func viewWillAppear(_ animated: Bool) {
+        if itemToEdit != nil { //Edit existing item
+            self.navigationItem.title = "Edit item"
+        } else { //Add new item
+            self.navigationItem.title = "Add new item"
+            trashButton.isEnabled = false
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
         previewImageButton.imageView?.contentMode = .scaleAspectFit
-        
-        if let topItem = self.navigationController?.navigationBar.topItem {
-            topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        }
         
         imagePicker = UIImagePickerController()
         
@@ -37,14 +41,12 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         pickerView.delegate = self
         pickerView.dataSource = self
         
+        if itemToEdit != nil { //Edit existing item
+            loadItemData()
+        }
+
 //        generateStoreData()
         getStores()
-        
-        if itemToEdit != nil {
-            loadItemData()
-        } else {
-            trashButton.isEnabled = false
-        }
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -104,14 +106,14 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
             }
             
             var index = 0
-            repeat {
+            while index < stores.count {
                 let store = stores[index]
                 if store.name == item.toStore?.name {
                     pickerView.selectRow(index, inComponent: 0, animated: false)
                     break
                 }
                 index += 1
-            } while index < stores.count
+            }
         }
     }
     
@@ -139,6 +141,9 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         }
     }
     
+    @IBAction func cancelButtonPressed(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+    }
     @IBAction func changeImage(_ sender: UIButton) {
         
         present(imagePicker, animated: true, completion: nil)
