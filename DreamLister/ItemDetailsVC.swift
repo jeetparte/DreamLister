@@ -9,26 +9,31 @@
 import UIKit
 import CoreData
 
-class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    @IBOutlet weak var imagePreview: UIButton!
+    @IBOutlet weak var previewImageButton: UIButton!
     @IBOutlet weak var titleField: CustomTextField!
     @IBOutlet weak var priceField: CustomTextField!
     @IBOutlet weak var descriptionField: CustomTextField!
     @IBOutlet weak var pickerView: UIPickerView!
+    @IBOutlet weak var trashButton: UIBarButtonItem!
     
     private var stores = [Store]()
+    private var imagePicker: UIImagePickerController!
     var itemToEdit: Item?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        imagePreview.imageView?.contentMode = .scaleAspectFit
+        previewImageButton.imageView?.contentMode = .scaleAspectFit
         
         if let topItem = self.navigationController?.navigationBar.topItem {
             topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         }
         
+        imagePicker = UIImagePickerController()
+        
+        imagePicker.delegate = self
         pickerView.delegate = self
         pickerView.dataSource = self
         
@@ -37,6 +42,8 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         
         if itemToEdit != nil {
             loadItemData()
+        } else {
+            trashButton.isEnabled = false
         }
     }
     
@@ -66,7 +73,6 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
                 store.name = "Flipkart"
             case 3:
                 store.name = "K Mart"
-                
             case 4:
                 store.name = "Tesla Dealership"
             default:
@@ -93,6 +99,9 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
             titleField.text = item.title
             priceField.text = "\(item.price)"
             descriptionField.text = item.details
+            if let itemImage = item.toImage?.image as? UIImage {
+                previewImageButton.setImage(itemImage, for: .normal)
+            }
             
             var index = 0
             repeat {
@@ -114,9 +123,31 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         item.details = descriptionField.text
         let selectedStore = stores[pickerView.selectedRow(inComponent: 0)]
         item.toStore = selectedStore
+        let image = Image(context: context)
+        image.image = previewImageButton.currentImage
+        item.toImage = image
         
         appDelegate.saveContext()
         
         navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func deleteButtonPressed(_ sender: Any) {
+        if itemToEdit != nil {
+            context.delete(itemToEdit!)
+            navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    @IBAction func changeImage(_ sender: UIButton) {
+        
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            previewImageButton.setImage(image, for: .normal)
+        }
+        picker.dismiss(animated: true, completion: nil)
     }
 }

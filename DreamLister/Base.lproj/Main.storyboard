@@ -165,6 +165,9 @@
                                     <constraint firstAttribute="width" constant="100" id="e0j-69-LZJ"/>
                                 </constraints>
                                 <state key="normal" image="imagePick"/>
+                                <connections>
+                                    <action selector="changeImage:" destination="EcA-2G-DOv" eventType="touchUpInside" id="PVz-43-xEL"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Title" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vft-eo-Rdi" customClass="CustomTextField" customModule="DreamLister" customModuleProvider="target">
                                 <rect key="frame" x="124" y="92" width="235" height="30"/>
@@ -249,14 +252,18 @@
                     <navigationItem key="navigationItem" title="Add / Edit" id="qWO-EA-KTT">
                         <barButtonItem key="rightBarButtonItem" systemItem="trash" id="Q4L-ii-RoJ">
                             <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="deleteButtonPressed:" destination="EcA-2G-DOv" id="jZZ-Zk-dFZ"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="descriptionField" destination="hvf-qG-Vq8" id="O4t-us-fh7"/>
-                        <outlet property="imagePreview" destination="Ifc-c1-Cpb" id="ZpC-K0-6rt"/>
                         <outlet property="pickerView" destination="eeb-Y3-YPZ" id="e2l-kr-pMk"/>
+                        <outlet property="previewImageButton" destination="Ifc-c1-Cpb" id="Rxh-sw-Qym"/>
                         <outlet property="priceField" destination="ouM-oO-YEB" id="Baa-br-Xg5"/>
                         <outlet property="titleField" destination="vft-eo-Rdi" id="JSY-cu-t0U"/>
+                        <outlet property="trashButton" destination="Q4L-ii-RoJ" id="dgA-Q3-Zjj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tEn-iD-4TY" userLabel="First Responder" sceneMemberID="firstResponder"/>

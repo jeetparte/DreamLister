@@ -19,5 +19,10 @@ class ItemCell: UITableViewCell {
         title.text = item.title
         price.text = "$\(Int(item.price))"
         itemDescription.text =  item.details
+        if let itemImage = item.toImage?.image as? UIImage {
+            thumbnail.image = itemImage
+        } else {
+            thumbnail.image = #imageLiteral(resourceName: "imagePick")
+        }
     }
 }
