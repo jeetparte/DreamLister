@@ -7,10 +7,18 @@
 //
 
 import UIKit
+import CoreData
 
-class ItemDetailsVC: UIViewController {
+class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var imagePreview: UIButton!
+    @IBOutlet weak var titleField: CustomTextField!
+    @IBOutlet weak var priceField: CustomTextField!
+    @IBOutlet weak var descriptionField: CustomTextField!
+    @IBOutlet weak var pickerView: UIPickerView!
+    
+    private var stores = [Store]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -19,22 +27,59 @@ class ItemDetailsVC: UIViewController {
         if let topItem = self.navigationController?.navigationBar.topItem {
             topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        
+        generateStoreData()
+        getStores()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
     }
-    */
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return stores.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return stores[row].name
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        //TODO:
+    }
+    
+    func generateStoreData() {
+        for x in 1...4 {
+            let store = Store(context: context)
+            switch x {
+            case 1:
+                store.name = "Amazon"
+            case 2:
+                store.name = "Flipkart"
+            case 3:
+                store.name = "K Mart"
 
+            case 4:
+                store.name = "Tesla Dealership"
+            default:
+                break
+            }
+        }
+        appDelegate.saveContext()
+    }
+    
+    func getStores() {
+        let fetchRequest: NSFetchRequest<Store> = Store.fetchRequest()
+        
+        do {
+            self.stores = try context.fetch(fetchRequest)
+            self.pickerView.reloadAllComponents()
+        } catch {
+            let error = error as NSError
+            print("\(error)")
+        }
+    }
 }
