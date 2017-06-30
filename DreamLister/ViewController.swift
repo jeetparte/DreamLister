@@ -9,8 +9,8 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate{
-
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
+    
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
     
@@ -21,15 +21,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         
-        generateTestData()
+//        generateTestData()
         attemptFetch()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! ItemCell
@@ -64,7 +64,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //TODO
+        if let selectedItem = fetchedResultsController.fetchedObjects?[indexPath.row] {
+            performSegue(withIdentifier: "selectedItemDetails", sender: selectedItem)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "selectedItemDetails" {
+            if let destination = segue.destination as? ItemDetailsVC {
+                if let selectedItem = sender as? Item {
+                    destination.itemToEdit = selectedItem
+                }
+            }
+        }
     }
     
     func attemptFetch() {
@@ -98,9 +110,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         switch type {
         case .insert:
             if let newIndexPath = newIndexPath {
-                 tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.fade)
+                tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.fade)
             }
-           
+            
         case .delete:
             if let indexPath = indexPath {
                 tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
@@ -121,7 +133,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func generateTestData() {
         let item = Item(context: context)
-        //TODO
         
         item.title = "MacBook Pro"
         item.price = 1800
@@ -139,6 +150,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         appDelegate.saveContext()
     }
-
+    
 }
 

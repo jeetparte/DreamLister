@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
-
+    
     @IBOutlet weak var imagePreview: UIButton!
     @IBOutlet weak var titleField: CustomTextField!
     @IBOutlet weak var priceField: CustomTextField!
@@ -18,10 +18,11 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     @IBOutlet weak var pickerView: UIPickerView!
     
     private var stores = [Store]()
+    var itemToEdit: Item?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         imagePreview.imageView?.contentMode = .scaleAspectFit
         
         if let topItem = self.navigationController?.navigationBar.topItem {
@@ -31,8 +32,12 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         pickerView.delegate = self
         pickerView.dataSource = self
         
-        generateStoreData()
+//        generateStoreData()
         getStores()
+        
+        if itemToEdit != nil {
+            loadItemData()
+        }
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -61,7 +66,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
                 store.name = "Flipkart"
             case 3:
                 store.name = "K Mart"
-
+                
             case 4:
                 store.name = "Tesla Dealership"
             default:
@@ -83,14 +88,32 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         }
     }
     
+    func loadItemData() {
+        if let item = itemToEdit {
+            titleField.text = item.title
+            priceField.text = "\(item.price)"
+            descriptionField.text = item.details
+            
+            var index = 0
+            repeat {
+                let store = stores[index]
+                if store.name == item.toStore?.name {
+                    pickerView.selectRow(index, inComponent: 0, animated: false)
+                    break
+                }
+                index += 1
+            } while index < stores.count
+        }
+    }
+    
     @IBAction func saveButtonPressed(_ sender: Any) {
-        let item = Item(context: context)
+        let item: Item = itemToEdit == nil ? Item(context: context) : itemToEdit!
         
         item.title = titleField.text
         item.price = Double(priceField.text!) ?? 0
         item.details = descriptionField.text
         let selectedStore = stores[pickerView.selectedRow(inComponent: 0)]
-        item.addToToStore(selectedStore)
+        item.toStore = selectedStore
         
         appDelegate.saveContext()
         
