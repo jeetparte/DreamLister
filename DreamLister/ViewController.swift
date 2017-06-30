@@ -74,6 +74,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         
+        controller.delegate = self
+        
         self.fetchedResultsController = controller
         
         do {
@@ -86,6 +88,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {

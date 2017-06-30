@@ -82,4 +82,18 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
             print("\(error)")
         }
     }
+    
+    @IBAction func saveButtonPressed(_ sender: Any) {
+        let item = Item(context: context)
+        
+        item.title = titleField.text
+        item.price = Double(priceField.text!) ?? 0
+        item.details = descriptionField.text
+        let selectedStore = stores[pickerView.selectedRow(inComponent: 0)]
+        item.addToToStore(selectedStore)
+        
+        appDelegate.saveContext()
+        
+        navigationController?.popViewController(animated: true)
+    }
 }
