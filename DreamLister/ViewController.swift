@@ -94,9 +94,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         case 0:
             fetchRequest.sortDescriptors = [dateSort]
         case 1:
-            fetchRequest.sortDescriptors = [priceSort]
-        case 2:
             fetchRequest.sortDescriptors = [titleSort]
+        case 2:
+            fetchRequest.sortDescriptors = [priceSort]
         default:
             fetchRequest.sortDescriptors = [dateSort]
             break
