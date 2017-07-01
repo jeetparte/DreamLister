@@ -49,7 +49,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fLh-cI-SoF">
-                                                    <rect key="frame" x="8" y="8" width="327" height="184"/>
+                                                    <rect key="frame" x="8" y="8" width="272" height="184"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tesla" translatesAutoresizingMaskIntoConstraints="NO" id="YOU-f8-f8h">
                                                             <rect key="frame" x="8" y="42" width="100" height="100"/>
@@ -59,7 +59,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tesla Model S" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q8a-Qa-xbW">
-                                                            <rect key="frame" x="116" y="42" width="203" height="21"/>
+                                                            <rect key="frame" x="116" y="42" width="148" height="21"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="21" id="aoC-2g-tP2"/>
                                                             </constraints>
@@ -68,7 +68,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$80,000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1jD-eZ-Hx3">
-                                                            <rect key="frame" x="116" y="71" width="203" height="21"/>
+                                                            <rect key="frame" x="116" y="71" width="148" height="21"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="21" id="boL-cC-HRQ"/>
                                                             </constraints>
@@ -77,7 +77,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Someday, my dream will come true and I shall own this car." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="6bF-5L-Q3l">
-                                                            <rect key="frame" x="116" y="100" width="203" height="68"/>
+                                                            <rect key="frame" x="116" y="100" width="148" height="68"/>
                                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
@@ -204,9 +204,6 @@
                             </textField>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eeb-Y3-YPZ">
                                 <rect key="frame" x="16" y="363" width="343" height="216"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="216" id="9cQ-Jz-nuR"/>
-                                </constraints>
                             </pickerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AiP-gB-Zuc">
                                 <rect key="frame" x="16" y="587" width="343" height="40"/>
@@ -224,6 +221,10 @@
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Store" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NEI-h9-szv">
                                 <rect key="frame" x="138" y="334" width="99" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="VVS-FM-mfj"/>
+                                    <constraint firstAttribute="width" constant="99" id="Vmt-sC-hVr"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -244,6 +245,7 @@
                             <constraint firstItem="eeb-Y3-YPZ" firstAttribute="leading" secondItem="Kyq-m3-xcv" secondAttribute="leadingMargin" id="1zB-eC-2a4"/>
                             <constraint firstItem="ouM-oO-YEB" firstAttribute="top" secondItem="vft-eo-Rdi" secondAttribute="bottom" constant="10" id="3DZ-bd-al5"/>
                             <constraint firstItem="ouM-oO-YEB" firstAttribute="trailing" secondItem="vft-eo-Rdi" secondAttribute="trailing" id="6qM-v5-Rgr"/>
+                            <constraint firstItem="NEI-h9-szv" firstAttribute="top" relation="greaterThanOrEqual" secondItem="obG-bi-NEz" secondAttribute="bottom" constant="16" id="8lA-Df-4ac"/>
                             <constraint firstItem="ouM-oO-YEB" firstAttribute="leading" secondItem="vft-eo-Rdi" secondAttribute="leading" id="CHh-I6-hHT"/>
                             <constraint firstItem="hvf-qG-Vq8" firstAttribute="trailing" secondItem="ouM-oO-YEB" secondAttribute="trailing" id="G3a-wT-SdE"/>
                             <constraint firstItem="AiP-gB-Zuc" firstAttribute="trailing" secondItem="Kyq-m3-xcv" secondAttribute="trailingMargin" id="GTy-cg-yXA"/>
