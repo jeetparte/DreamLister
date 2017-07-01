@@ -44,9 +44,13 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         imagePicker = UIImagePickerController()
         
         imagePicker.delegate = self
-        storePickerField.delegate = self
         pickerView.delegate = self
         pickerView.dataSource = self
+        
+        titleField.delegate = self
+        priceField.delegate = self
+        storePickerField.delegate = self
+        descriptionField.delegate = self
         
         
         do {
@@ -143,10 +147,22 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        pickerView.isHidden = false
-        selectStoreLabel.isHidden = false
-        storePickerField.isEnabled = false
-        return false
+        if textField.placeholder == "Store" {
+            pickerView.isHidden = false
+            selectStoreLabel.isHidden = false
+            print("Touched")
+            view.endEditing(true)
+            return false
+        } else {
+            pickerView.isHidden = true
+            
+        }
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     @IBAction func saveButtonPressed(_ sender: Any) {
