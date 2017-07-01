@@ -192,11 +192,11 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Description" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hvf-qG-Vq8" customClass="CustomTextField" customModule="DreamLister" customModuleProvider="target">
-                                <rect key="frame" x="16" y="172" width="343" height="60"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Store" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hvf-qG-Vq8" customClass="CustomTextField" customModule="DreamLister" customModuleProvider="target">
+                                <rect key="frame" x="16" y="172" width="343" height="30"/>
                                 <color key="backgroundColor" red="0.92146831750000002" green="0.92162626979999995" blue="0.92145836349999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="mVx-ff-jmE"/>
+                                    <constraint firstAttribute="height" constant="30" id="mVx-ff-jmE"/>
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -228,9 +228,19 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Description" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="obG-bi-NEz" customClass="CustomTextField" customModule="DreamLister" customModuleProvider="target">
+                                <rect key="frame" x="16" y="212" width="343" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="1AG-Fp-UpK"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="obG-bi-NEz" firstAttribute="top" secondItem="hvf-qG-Vq8" secondAttribute="bottom" constant="10" id="0wX-in-AyS"/>
                             <constraint firstItem="eeb-Y3-YPZ" firstAttribute="leading" secondItem="Kyq-m3-xcv" secondAttribute="leadingMargin" id="1zB-eC-2a4"/>
                             <constraint firstItem="ouM-oO-YEB" firstAttribute="top" secondItem="vft-eo-Rdi" secondAttribute="bottom" constant="10" id="3DZ-bd-al5"/>
                             <constraint firstItem="ouM-oO-YEB" firstAttribute="trailing" secondItem="vft-eo-Rdi" secondAttribute="trailing" id="6qM-v5-Rgr"/>
@@ -238,9 +248,11 @@
                             <constraint firstItem="hvf-qG-Vq8" firstAttribute="trailing" secondItem="ouM-oO-YEB" secondAttribute="trailing" id="G3a-wT-SdE"/>
                             <constraint firstItem="AiP-gB-Zuc" firstAttribute="trailing" secondItem="Kyq-m3-xcv" secondAttribute="trailingMargin" id="GTy-cg-yXA"/>
                             <constraint firstItem="NEI-h9-szv" firstAttribute="centerX" secondItem="Kyq-m3-xcv" secondAttribute="centerX" id="HZO-CA-Dnt"/>
+                            <constraint firstItem="obG-bi-NEz" firstAttribute="leading" secondItem="hvf-qG-Vq8" secondAttribute="leading" id="NlG-PQ-rhd"/>
                             <constraint firstItem="hvf-qG-Vq8" firstAttribute="top" secondItem="ouM-oO-YEB" secondAttribute="bottom" constant="10" id="QFC-zC-GDl"/>
                             <constraint firstItem="rl3-iI-G8G" firstAttribute="top" secondItem="AiP-gB-Zuc" secondAttribute="bottom" constant="40" id="THZ-Aa-hRr"/>
                             <constraint firstItem="vft-eo-Rdi" firstAttribute="leading" secondItem="Ifc-c1-Cpb" secondAttribute="trailing" constant="8" id="dRK-Is-ATE"/>
+                            <constraint firstItem="obG-bi-NEz" firstAttribute="trailing" secondItem="hvf-qG-Vq8" secondAttribute="trailing" id="gaK-cj-8Oj"/>
                             <constraint firstItem="hvf-qG-Vq8" firstAttribute="top" secondItem="Ifc-c1-Cpb" secondAttribute="bottom" id="mcb-0f-OcB"/>
                             <constraint firstItem="Ifc-c1-Cpb" firstAttribute="top" secondItem="Y9v-5c-qx9" secondAttribute="bottom" constant="8" id="oAH-7p-rEx"/>
                             <constraint firstItem="vft-eo-Rdi" firstAttribute="trailing" secondItem="Kyq-m3-xcv" secondAttribute="trailingMargin" id="r0C-OI-Y0A"/>
@@ -266,10 +278,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="descriptionField" destination="hvf-qG-Vq8" id="O4t-us-fh7"/>
+                        <outlet property="descriptionField" destination="obG-bi-NEz" id="eiq-OH-Zcn"/>
                         <outlet property="pickerView" destination="eeb-Y3-YPZ" id="e2l-kr-pMk"/>
                         <outlet property="previewImageButton" destination="Ifc-c1-Cpb" id="Rxh-sw-Qym"/>
                         <outlet property="priceField" destination="ouM-oO-YEB" id="Baa-br-Xg5"/>
+                        <outlet property="selectStoreLabel" destination="NEI-h9-szv" id="YNH-tQ-lTo"/>
+                        <outlet property="storePickerField" destination="hvf-qG-Vq8" id="edm-aa-owb"/>
                         <outlet property="titleField" destination="vft-eo-Rdi" id="JSY-cu-t0U"/>
                         <outlet property="trashButton" destination="Q4L-ii-RoJ" id="dgA-Q3-Zjj"/>
                     </connections>

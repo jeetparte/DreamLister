@@ -9,11 +9,13 @@
 import UIKit
 import CoreData
 
-class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var previewImageButton: UIButton!
     @IBOutlet weak var titleField: CustomTextField!
     @IBOutlet weak var priceField: CustomTextField!
+    @IBOutlet weak var storePickerField: CustomTextField!
+    @IBOutlet weak var selectStoreLabel: UILabel!
     @IBOutlet weak var descriptionField: CustomTextField!
     @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var trashButton: UIBarButtonItem!
@@ -29,6 +31,10 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
             self.navigationItem.title = "Add new item"
             trashButton.isEnabled = false
         }
+        
+        pickerView.isHidden = true
+        selectStoreLabel.isHidden = true
+        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +44,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         imagePicker = UIImagePickerController()
         
         imagePicker.delegate = self
+        storePickerField.delegate = self
         pickerView.delegate = self
         pickerView.dataSource = self
         
@@ -74,7 +81,10 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        //TODO:
+        storePickerField.text = stores[row].name
+        storePickerField.isEnabled = true
+        selectStoreLabel.isHidden = true
+        pickerView.isHidden = true
     }
     
     func generateStoreData() {
@@ -113,6 +123,9 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
             titleField.text = item.title
             priceField.text = "\(item.price)"
             descriptionField.text = item.details
+            if let storeName = item.toStore?.name {
+                storePickerField.text = storeName
+            }
             if let itemImage = item.toImage?.image as? UIImage {
                 previewImageButton.setImage(itemImage, for: .normal)
             }
@@ -127,6 +140,13 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
                 index += 1
             }
         }
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        pickerView.isHidden = false
+        selectStoreLabel.isHidden = false
+        storePickerField.isEnabled = false
+        return false
     }
     
     @IBAction func saveButtonPressed(_ sender: Any) {
