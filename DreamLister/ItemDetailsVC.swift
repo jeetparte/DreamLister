@@ -41,12 +41,24 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         pickerView.delegate = self
         pickerView.dataSource = self
         
+        
+        do {
+            let storeFetchRequest: NSFetchRequest<Store> = Store.fetchRequest()
+            let noOfSavedStores = try context.count(for: storeFetchRequest)
+            //generate stores for picker view if they do not exist
+            if noOfSavedStores <= 0 {
+                generateStoreData()
+            }
+        } catch {
+            let error = error as NSError
+            fatalError("Unresolved error \(error), \(error.userInfo)")
+        }
+        
+        getStores()
+        
         if itemToEdit != nil { //Edit existing item
             loadItemData()
         }
-
-//        generateStoreData()
-        getStores()
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -128,7 +140,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         let image = Image(context: context)
         image.image = previewImageButton.currentImage
         item.toImage = image
-        
+
         appDelegate.saveContext()
         
         navigationController?.popViewController(animated: true)
@@ -145,7 +157,6 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         navigationController?.popViewController(animated: true)
     }
     @IBAction func changeImage(_ sender: UIButton) {
-        
         present(imagePicker, animated: true, completion: nil)
     }
     

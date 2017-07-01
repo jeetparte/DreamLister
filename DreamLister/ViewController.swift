@@ -21,7 +21,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         
-//        generateTestData()
+        do {
+            let itemFetchRequest: NSFetchRequest<Item> = Item.fetchRequest()
+            let noOfSavedItems = try context.count(for: itemFetchRequest)
+            //generate sample items if no items exist
+            if noOfSavedItems <= 0 {
+                generateTestData()
+            }
+        } catch {
+            let error = error as NSError
+            fatalError("Unresolved error \(error), \(error.userInfo)")
+        }
+        
         attemptFetch()
     }
     
@@ -153,16 +164,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         item.title = "MacBook Pro"
         item.price = 1800
         item.details = "I can't wait until the September event, I hope they release new MPBs"
+        let mbpImage = Image(context: context)
+        mbpImage.image = #imageLiteral(resourceName: "mbp")
+        item.toImage = mbpImage
         
         let item2 = Item(context: context)
         item2.title = "Bose Headphones"
         item2.price = 300
-        item2.details = "But man, its so nice to be able to blaock out everyone with the noise canceling tech."
+        item2.details = "But man, its so nice to be able to block out everyone with the noise canceling tech."
+        let headphoneImage = Image(context: context)
+        headphoneImage.image = #imageLiteral(resourceName: "bose")
+        item2.toImage = headphoneImage
         
         let item3 = Item(context: context)
         item3.title = "Tesla Model S"
         item3.price = 110000
         item3.details = "Oh man this is a beautiful car. And one day, I willl own it"
+        let teslaImage = Image(context: context)
+        teslaImage.image = #imageLiteral(resourceName: "tesla")
+        item3.toImage = teslaImage
         
         appDelegate.saveContext()
     }
