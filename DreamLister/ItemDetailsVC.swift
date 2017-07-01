@@ -170,6 +170,8 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         if itemToEdit != nil {
             context.delete(itemToEdit!)
             navigationController?.popViewController(animated: true)
+            
+            appDelegate.saveContext()
         }
     }
     
