@@ -44,6 +44,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
+        
+        //Delete ItemTypes not associated with existing items
+        let itemFetchRequest: NSFetchRequest<Item> = Item.fetchRequest()
+        let itemTypeFetchRequest: NSFetchRequest<ItemType> = ItemType.fetchRequest()
+        
+        do {
+            let items = try context.fetch(itemFetchRequest)
+            let itemTypes = try context.fetch(itemTypeFetchRequest)
+            
+            for type in itemTypes {
+                var typeNotInUse: Bool = true
+                
+                for item in items {
+                    if item.toItemType == type {
+                        typeNotInUse = false
+                    }
+                }
+                
+                if typeNotInUse {
+                    context.delete(type)
+                }
+            }
+        } catch {
+            let error = error as NSError
+            fatalError("Unresolved error \(error), \(error.userInfo)")
+        }
+
         self.saveContext()
     }
 

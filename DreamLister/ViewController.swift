@@ -66,7 +66,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150
+        return 180
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -155,8 +155,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func generateTestData() {
         let item = Item(context: context)
-        
         item.title = "MacBook Pro"
+        let itemType = ItemType(context: context)
+        itemType.type = "Laptop"
+        item.toItemType = itemType
         item.price = 1800
         item.details = "I can't wait until the September event, I hope they release new MPBs"
         let mbpImage = Image(context: context)
@@ -165,6 +167,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let item2 = Item(context: context)
         item2.title = "Bose Headphones"
+        let itemType2 = ItemType(context: context)
+        itemType2.type = "Audio accessories"
+        item2.toItemType = itemType2
         item2.price = 300
         item2.details = "But man, its so nice to be able to block out everyone with the noise canceling tech."
         let headphoneImage = Image(context: context)
@@ -173,6 +178,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let item3 = Item(context: context)
         item3.title = "Tesla Model S"
+        let itemType3 = ItemType(context: context)
+        itemType3.type = "Automobile"
+        item3.toItemType = itemType3
         item3.price = 110000
         item3.details = "Oh man this is a beautiful car. And one day, I willl own it"
         let teslaImage = Image(context: context)

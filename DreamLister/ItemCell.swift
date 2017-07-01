@@ -12,11 +12,13 @@ class ItemCell: UITableViewCell {
     
     @IBOutlet weak var thumbnail: UIImageView!
     @IBOutlet weak var title: UILabel!
+    @IBOutlet weak var type: UILabel!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var itemDescription: UILabel!
     
     func configureCell(from item: Item) {
         title.text = item.title
+        type.text = item.toItemType?.type
         price.text = "$\(Int(item.price))"
         itemDescription.text =  item.details
         if let itemImage = item.toImage?.image as? UIImage {

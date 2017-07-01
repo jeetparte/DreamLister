@@ -15,6 +15,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     @IBOutlet weak var titleField: CustomTextField!
     @IBOutlet weak var priceField: CustomTextField!
     @IBOutlet weak var storePickerField: CustomTextField!
+    @IBOutlet weak var typeField: CustomTextField!
     @IBOutlet weak var selectStoreLabel: UILabel!
     @IBOutlet weak var descriptionField: CustomTextField!
     @IBOutlet weak var pickerView: UIPickerView!
@@ -50,6 +51,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         titleField.delegate = self
         priceField.delegate = self
         storePickerField.delegate = self
+        typeField.delegate = self
         descriptionField.delegate = self
         
         
@@ -130,6 +132,9 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
             if let storeName = item.toStore?.name {
                 storePickerField.text = storeName
             }
+            if let itemType = item.toItemType?.type {
+                typeField.text = itemType
+            }
             if let itemImage = item.toImage?.image as? UIImage {
                 previewImageButton.setImage(itemImage, for: .normal)
             }
@@ -150,12 +155,11 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         if textField.placeholder == "Store" {
             pickerView.isHidden = false
             selectStoreLabel.isHidden = false
-            print("Touched")
             view.endEditing(true)
             return false
         } else {
+            selectStoreLabel.isHidden = true
             pickerView.isHidden = true
-            
         }
         return true
     }
@@ -173,6 +177,9 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         item.details = descriptionField.text
         let selectedStore = stores[pickerView.selectedRow(inComponent: 0)]
         item.toStore = selectedStore
+        let type = ItemType(context: context)
+        type.type = typeField.text
+        item.toItemType = type
         let image = Image(context: context)
         image.image = previewImageButton.currentImage
         item.toImage = image
