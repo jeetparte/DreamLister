@@ -114,8 +114,10 @@ class ViewController: UIViewController {
         
         appDelegate.saveContext()
     }
-    
-    //MARK: - IBActions
+}
+
+//MARK: - IBActions
+extension ViewController {
     @IBAction func segmentPressed(_ sender: UISegmentedControl) {
         attemptFetch()
         tableView.reloadData()

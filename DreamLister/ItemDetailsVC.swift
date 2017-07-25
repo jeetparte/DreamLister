@@ -125,8 +125,10 @@ class ItemDetailsVC: UIViewController {
             }
         }
     }
-    
-    //MARK: - IBActions
+}
+
+//MARK: - IBActions
+extension ItemDetailsVC {
     @IBAction func saveButtonPressed(_ sender: Any) {
         let item: Item = itemToEdit == nil ? Item(context: context) : itemToEdit!
         
@@ -141,7 +143,7 @@ class ItemDetailsVC: UIViewController {
         let image = Image(context: context)
         image.image = previewImageButton.currentImage
         item.toImage = image
-
+        
         appDelegate.saveContext()
         
         navigationController?.popViewController(animated: true)
@@ -164,7 +166,6 @@ class ItemDetailsVC: UIViewController {
         present(imagePicker, animated: true, completion: nil)
     }
 }
-
 //MARK: - UIPickerViewDataSource
 extension ItemDetailsVC: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
