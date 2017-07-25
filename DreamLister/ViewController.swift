@@ -9,15 +9,14 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
-    
+class ViewController: UIViewController {
+
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
+    internal var fetchedResultsController: NSFetchedResultsController<Item>!
     
-    private var fetchedResultsController: NSFetchedResultsController<Item>!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -32,49 +31,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let error = error as NSError
             fatalError("Unresolved error \(error), \(error.userInfo)")
         }
-        
         attemptFetch()
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! ItemCell
-        self.configureCell(cell, at: indexPath)
-        return cell
-    }
-    
-    private func configureCell(_ cell: ItemCell, at indexPath: IndexPath) {
+    internal func configureCell(_ cell: ItemCell, at indexPath: IndexPath) {
         let item = fetchedResultsController.object(at: indexPath)
         cell.configureCell(from: item)
-        
     }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sections = fetchedResultsController.sections {
-            let numberOfRows = sections[section].numberOfObjects
-            return numberOfRows
-        }
-        
-        return 0
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        if let sections = fetchedResultsController.sections {
-            return sections.count
-        }
-        
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 180
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let selectedItem = fetchedResultsController.fetchedObjects?[indexPath.row] {
-            performSegue(withIdentifier: "selectedItemDetails", sender: selectedItem)
-        }
-    }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "selectedItemDetails" {
             if let destination = segue.destination as? ItemDetailsVC {
@@ -103,9 +67,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        
         controller.delegate = self
-        
         self.fetchedResultsController = controller
         
         do {
@@ -113,43 +75,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         } catch{
             let error = error as NSError
             print("\(error)")
-        }
-    }
-    
-    @IBAction func segmentPressed(_ sender: UISegmentedControl) {
-        attemptFetch()
-        tableView.reloadData()
-    }
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            if let newIndexPath = newIndexPath {
-                tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.fade)
-            }
-            
-        case .delete:
-            if let indexPath = indexPath {
-                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-            }
-        case .move:
-            if let indexPath = indexPath, let newIndexPath = newIndexPath {
-                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-                tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.fade)
-            }
-        case .update:
-            if let indexPath = indexPath {
-                let cell = tableView.cellForRow(at: indexPath) as! ItemCell
-                self.configureCell(cell, at: indexPath)
-            }
-            break;
         }
     }
     
@@ -189,5 +114,86 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         appDelegate.saveContext()
     }
+    
+    //MARK: - IBActions
+    @IBAction func segmentPressed(_ sender: UISegmentedControl) {
+        attemptFetch()
+        tableView.reloadData()
+    }
 }
 
+//MARK: - UITableViewDataSource
+extension ViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! ItemCell
+        self.configureCell(cell, at: indexPath)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let sections = fetchedResultsController.sections {
+            let numberOfRows = sections[section].numberOfObjects
+            return numberOfRows
+        }
+        
+        return 0
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if let sections = fetchedResultsController.sections {
+            return sections.count
+        }
+        
+        return 1
+    }
+}
+
+//MARK: - UITableViewDelegate
+extension ViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 180
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let selectedItem = fetchedResultsController.fetchedObjects?[indexPath.row] {
+            performSegue(withIdentifier: "selectedItemDetails", sender: selectedItem)
+        }
+    }
+}
+
+//MARK: - NSFetchedResultsControllerDelegate
+extension ViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            if let newIndexPath = newIndexPath {
+                tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.fade)
+            }
+            
+        case .delete:
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+            }
+        case .move:
+            if let indexPath = indexPath, let newIndexPath = newIndexPath {
+                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+                tableView.insertRows(at: [newIndexPath], with: UITableViewRowAnimation.fade)
+            }
+        case .update:
+            if let indexPath = indexPath {
+                let cell = tableView.cellForRow(at: indexPath) as! ItemCell
+                self.configureCell(cell, at: indexPath)
+            }
+            break;
+        }
+    }
+}

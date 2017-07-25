@@ -9,8 +9,9 @@
 import UIKit
 import CoreData
 
-class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class ItemDetailsVC: UIViewController {
     
+    //MARK: - Properties
     @IBOutlet weak var previewImageButton: UIButton!
     @IBOutlet weak var titleField: CustomTextField!
     @IBOutlet weak var priceField: CustomTextField!
@@ -21,10 +22,11 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var trashButton: UIBarButtonItem!
     
-    private var stores = [Store]()
-    private var imagePicker: UIImagePickerController!
-    var itemToEdit: Item?
+    internal var stores = [Store]()
+    internal var imagePicker: UIImagePickerController!
+    weak var itemToEdit: Item?
     
+    //MARK: - Methods
     override func viewWillAppear(_ animated: Bool) {
         if itemToEdit != nil { //Edit existing item
             self.navigationItem.title = "Edit item"
@@ -32,10 +34,8 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
             self.navigationItem.title = "Add new item"
             trashButton.isEnabled = false
         }
-        
         pickerView.isHidden = true
         selectStoreLabel.isHidden = true
-        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,17 +43,14 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         previewImageButton.imageView?.contentMode = .scaleAspectFit
         
         imagePicker = UIImagePickerController()
-        
         imagePicker.delegate = self
         pickerView.delegate = self
         pickerView.dataSource = self
-        
         titleField.delegate = self
         priceField.delegate = self
         storePickerField.delegate = self
         typeField.delegate = self
         descriptionField.delegate = self
-        
         
         do {
             let storeFetchRequest: NSFetchRequest<Store> = Store.fetchRequest()
@@ -66,31 +63,10 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
             let error = error as NSError
             fatalError("Unresolved error \(error), \(error.userInfo)")
         }
-        
         getStores()
-        
         if itemToEdit != nil { //Edit existing item
             loadItemData()
         }
-    }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return stores.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return stores[row].name
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        storePickerField.text = stores[row].name
-        storePickerField.isEnabled = true
-        selectStoreLabel.isHidden = true
-        pickerView.isHidden = true
     }
     
     func generateStoreData() {
@@ -114,7 +90,6 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     
     func getStores() {
         let fetchRequest: NSFetchRequest<Store> = Store.fetchRequest()
-        
         do {
             self.stores = try context.fetch(fetchRequest)
             self.pickerView.reloadAllComponents()
@@ -151,24 +126,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         }
     }
     
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if textField.placeholder == "Store" {
-            pickerView.isHidden = false
-            selectStoreLabel.isHidden = false
-            view.endEditing(true)
-            return false
-        } else {
-            selectStoreLabel.isHidden = true
-            pickerView.isHidden = true
-        }
-        return true
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
+    //MARK: - IBActions
     @IBAction func saveButtonPressed(_ sender: Any) {
         let item: Item = itemToEdit == nil ? Item(context: context) : itemToEdit!
         
@@ -201,14 +159,64 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     @IBAction func cancelButtonPressed(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
     }
+    
     @IBAction func changeImage(_ sender: UIButton) {
         present(imagePicker, animated: true, completion: nil)
     }
+}
+
+//MARK: - UIPickerViewDataSource
+extension ItemDetailsVC: UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
     
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return stores.count
+    }
+}
+
+//MARK: - UIPickerViewDelegate
+extension ItemDetailsVC: UIPickerViewDelegate {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return stores[row].name
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        storePickerField.text = stores[row].name
+        storePickerField.isEnabled = true
+        selectStoreLabel.isHidden = true
+        pickerView.isHidden = true
+    }
+}
+
+//MARK: - UIImagePickerControllerDelegate
+extension ItemDetailsVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             previewImageButton.setImage(image, for: .normal)
         }
         picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+//MARK: - UITextFieldDelegate
+extension ItemDetailsVC: UITextFieldDelegate {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField.placeholder == "Store" {
+            pickerView.isHidden = false
+            selectStoreLabel.isHidden = false
+            view.endEditing(true)
+            return false
+        } else {
+            selectStoreLabel.isHidden = true
+            pickerView.isHidden = true
+        }
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
